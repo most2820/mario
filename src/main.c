@@ -67,32 +67,32 @@ void handleInput()
 
 collision(int dir)
 {
-	for (int i = player.position.y / 16; i < (player.position.y + 16) / 16; i++)
+	for (int i = player.position.y / 16; i < (player.position.y + marioSprite.h) / 16; i++)
 	{
-		for (int j = player.position.x / 16; j < (player.position.x + 16) / 16; j++)
+		for (int j = player.position.x / 16; j < (player.position.x + marioSprite.w) / 16; j++)
 		{
 			if (dir == 0)
 			{
 				if (player.speed.x > 0 && level[i][j] == 0)
 				{
-					player.position.x = j * 16 - 16;
+					player.position.x = j * 16 - marioSprite.w;
 				}
 				if (player.speed.x < 0 && level[i][j] == 0)
 				{
-					player.position.x = j * 16 + 16;
+					player.position.x = j * 16 + marioSprite.w;
 				}
 			}
 			if (dir == 1)
 			{
 				if (player.speed.y > 0 && level[i][j] == 0)
 				{
-					player.position.y = i * 16 - 16;
+					player.position.y = i * 16 - marioSprite.h;
 					player.onGround = TRUE;
 					player.speed.y = 0;
 				}
 				if (player.speed.y < 0 && level[i][j] == 0)
 				{
-					player.position.y = i * 16 + 16;
+					player.position.y = i * 16 + marioSprite.h;
 					player.speed.y = 0;
 				}
 			}
