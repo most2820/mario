@@ -2,8 +2,7 @@
 #include "resources.h"
 #define SFX_JUMP 64
 #define MAX_X 640
-#define MAX_Y 224
-u8 level[14][40] = {
+char level[14][40] = {
 	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 	{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
@@ -46,53 +45,50 @@ void handleInput()
 {
 	u16 value = JOY_readJoypad(JOY_1);
 
-	if (value)
+	if (value & BUTTON_LEFT)
 	{
-		if (value & BUTTON_LEFT)
-		{
-			player.speed.x = -2;
-		}
-		else if (value & BUTTON_RIGHT)
-		{
-			player.speed.x = 2;
-		}
-		if (value & BUTTON_C && player.onGround)
-		{
-			player.speed.y = -8;
-			player.onGround = FALSE;
-			XGM_startPlayPCM(SFX_JUMP, 1, SOUND_PCM_CH2);
-		}
+		player.speed.x = -2;
+	}
+	else if (value & BUTTON_RIGHT)
+	{
+		player.speed.x = 2;
+	}
+	if (value & BUTTON_C && player.onGround)
+	{
+		player.speed.y = -8;
+		player.onGround = FALSE;
+		XGM_startPlayPCM(SFX_JUMP, 1, SOUND_PCM_CH2);
 	}
 }
 
-collision(int dir)
+void collision(int dir)
 {
-	for (int i = player.position.y / 16; i < (player.position.y + marioSprite.h) / 16; i++)
+	for (int i = player.position.y / 16; i < (player.position.y + 16) / 16; i++)
 	{
-		for (int j = player.position.x / 16; j < (player.position.x + marioSprite.w) / 16; j++)
+		for (int j = player.position.x / 16; j < (player.position.x + 16) / 16; j++)
 		{
 			if (dir == 0)
 			{
 				if (player.speed.x > 0 && level[i][j] == 0)
 				{
-					player.position.x = j * 16 - marioSprite.w;
+					player.position.x = j * 16 - 16;
 				}
 				if (player.speed.x < 0 && level[i][j] == 0)
 				{
-					player.position.x = j * 16 + marioSprite.w;
+					player.position.x = j * 16 + 16;
 				}
 			}
 			if (dir == 1)
 			{
 				if (player.speed.y > 0 && level[i][j] == 0)
 				{
-					player.position.y = i * 16 - marioSprite.h;
+					player.position.y = i * 16 - 16;
 					player.onGround = TRUE;
 					player.speed.y = 0;
 				}
 				if (player.speed.y < 0 && level[i][j] == 0)
 				{
-					player.position.y = i * 16 + marioSprite.h;
+					player.position.y = i * 16 + 16;
 					player.speed.y = 0;
 				}
 			}
